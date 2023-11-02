@@ -1,24 +1,35 @@
 <template>
   <div id="app">
-    <Tower v-if="!gameFinish && !gameOver" />
-    <p v-if="gameFinish && !gameOver">
-      Vuuuu, You have successfully completed!!
-    </p>
-    <p v-if="gameOver">Game Over!</p>
+      <div v-if="isStopGame && activeFloor<0">
+        <div>Vuuuu, You have successfully completed!!</div>
+        <button @click="RESET_GAME">Reset</button>
+      </div>
+      <div v-if="gameOver">
+          <div>Game Over</div>
+          <button @click="RESET_GAME">Reset</button>
+      </div>
+      <Header v-if="!isStartGame"></Header>
+      <Tower></Tower>
   </div>
 </template>
 
  <script>
-import { mapState } from "vuex";
+import { mapState,mapGetters, mapMutations } from "vuex";
 import Tower from "./components/Tower";
+import Header from "./components/Header";
 
 export default {
   components: {
+    Header,
     Tower,
   },
   computed: {
-    ...mapState(["gameOver", "gameFinish"]),
+    ...mapGetters(['isStartGame', 'isStopGame']),
+    ...mapState(["gameOver","activeFloor"]),
   },
+  methods: {
+    ...mapMutations(['RESET_GAME'])
+  }
 };
 </script>
 
@@ -43,31 +54,5 @@ export default {
 p,
 h3 {
   grid-column: span 3;
-}
-
-.dragon-btn {
-  width: 100px;
-  height: 40px;
-  background-color: #d6d6d6;
-  border: 1px solid #808080;
-}
-.btn-start {
-  width: 100px;
-  height: 40px;
-  background-color: #d83a3a;
-  border: 1px solid #fefefe;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-}
-.active-floor {
-  background-color: rgb(0, 245, 41);
-  cursor: pointer;
-}
-.egg-bg {
-  background-image: url("~@/assets/dragon-egg.png");
-  background-repeat: no-repeat;
-  background-size: 40px 30px;
-  background-position: center;
 }
 </style>
